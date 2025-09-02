@@ -1,5 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using TMPro;
+using System.Collections;
 
 // The GameManager controls overall game flow:
 // - handles win/lose conditions
@@ -11,20 +13,24 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance { get; private set; }
 
     [Header("Refs")]
-    
-     // Reference to the player controller script (Dog)
+
+    // Reference to the player controller script (Dog)
     public PlayerController player;
-    
+
     // UI panels
     public CanvasGroup winUI;
     public CanvasGroup loseUI;
 
-    
+
     // Audio settings
     public AudioSource ambienceSource; // background ambience audio source
     public AudioClip winClip; // sound played when player wins
     public AudioClip loseClip; // sound played when player loses
 
+
+    public TMP_Text countdownText;
+    public float countdownTime = 3f; // how long to count down
+    public bool gameActive = false; // controls when player can move
 
     // Internal state flag to prevent multiple win/lose triggers
     bool ended = false;
@@ -47,6 +53,31 @@ public class GameManager : MonoBehaviour
             ambienceSource.loop = true;
             ambienceSource.Play();
         }
+
+        // Start countdown at scene load
+        StartCoroutine(StartCountdown());
+    }
+
+    private IEnumerator StartCountdown()
+    {
+        gameActive = false; // disable player until countdown ends
+        player.SetInputEnabled(false);
+
+        float time = countdownTime;
+
+        while (time > 0)
+        {
+            countdownText.text = Mathf.Ceil(time).ToString(); // "3", "2", "1"
+            yield return new WaitForSeconds(1f);
+            time--;
+        }
+
+        countdownText.text = "Go!";
+        yield return new WaitForSeconds(1f);
+
+        countdownText.text = ""; // clear text
+        gameActive = true;
+        player.SetInputEnabled(true);
     }
 
     // Helper to show/hide UI panels
@@ -65,7 +96,7 @@ public class GameManager : MonoBehaviour
 
         // Prevent multiple calls
         if (ended) return;
-        ended = true;        
+        ended = true;
 
         // Disable player movement
         if (player) player.SetInputEnabled(false);
@@ -89,12 +120,12 @@ public class GameManager : MonoBehaviour
         if (ended) return;
         ended = true;
 
-         // Disable player movement
+        // Disable player movement
         if (player) player.SetInputEnabled(false);
 
         // Show Win UI panel
         SetGroup(winUI, true);
-        
+
         Cursor.visible = true;
 
         // Play win sound once
@@ -115,8 +146,8 @@ public class GameManager : MonoBehaviour
         Application.Quit();
 
         // If running in the editor, stop playing
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
             UnityEditor.EditorApplication.isPlaying = false;
-        #endif
+#endif
     }
 }

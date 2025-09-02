@@ -14,8 +14,8 @@ TagManager:
   - Wall
   - Dog
   - Goal
-  - 
-  - 
+  - Menu
+  - background
   - 
   - 
   - 
@@ -40,4 +40,7 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Menu
+    uniqueID: 3239005663
     locked: 0
