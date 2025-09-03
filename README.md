@@ -81,6 +81,24 @@ Assets/
 
 ---
 
+## 🤖 Known Issues
+- **UI scaling:** Depending on screen resolution, UI text (e.g., countdown) may appear too small or off-center.
+- **Fast mouse moves:** If the dog moves extremely quickly, it may visually overlap walls before collision registers (a limitation of using `MovePosition` without interpolation).
+- **Quit button:** Has no effect in the web host.
+
+--- 
+
+## ⌛ What is Skipped
+- No multiple levels or level progression.
+- No animations for the dog or bone.
+- No mobile/touch controls (mouse only).
+- No save/load system except for audio volume.
+- No pause menu during gameplay.
+- No VFX/UI transitions
+- No Timer/best time 
+
+---
+
 ## 📜 License
 This project is for learning/demo purposes.  
 Feel free to fork and modify.
